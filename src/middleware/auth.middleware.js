@@ -18,13 +18,14 @@ const validateToken = (request, response, next) => {
         return;
     }
 
-    const { error } = authUtils.validateToken(token);
+    const { error, decoded } = authUtils.validateToken(token);
     
     if (error) {
         response.status(401).json({ message: 'Expired or invalid token' });
         return;
     }
-
+    
+    request.body.userEmail = decoded.email;
     next();
 };
 
