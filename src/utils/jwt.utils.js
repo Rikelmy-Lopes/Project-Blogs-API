@@ -6,6 +6,17 @@ const createToken = (email) => {
     return token;
 };
 
+const validateToken = (token) => {
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        return { error: null, decoded };
+    } catch (_error) {
+        const error = new Error('Expired or invalid token');
+        return { error, decoded: null };
+    }
+};
+
 module.exports = {
     createToken,
+    validateToken,
 };
