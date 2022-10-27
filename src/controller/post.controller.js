@@ -10,12 +10,22 @@ const addPost = async (request, response) => {
 };
 
 const getAllPost = async (_request, response) => {
-    const blogPosts = await postService.getAllPost();
+    const { posts } = await postService.getAllPost();
 
-    response.status(200).json(blogPosts);
+    response.status(200).json(posts);
+};
+
+const getPostById = async (request, response) => {
+    const { id } = request.params;
+    const { post, error } = await postService.getPostById(id);
+
+    if (error) return response.status(404).json({ message: error });
+
+    response.status(200).json(post);
 };
 
 module.exports = {
     getAllPost,
     addPost,
+    getPostById,
 };
