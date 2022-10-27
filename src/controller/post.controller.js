@@ -34,9 +34,24 @@ const updatePost = async (request, response) => {
     response.status(200).json(updatedPost);
 };
 
+const deletePost = async (request, response) => {
+    const { id } = request.params;
+    const { userEmail } = request.body;
+    const { error, errorUnauthorized } = await postService.deletePost({ id, userEmail });
+
+    if (error) return response.status(404).json({ message: error });
+
+    if (errorUnauthorized) { 
+        return response.status(401).json({ message: errorUnauthorized }); 
+}
+
+    response.status(204).send();
+};
+
 module.exports = {
     getAllPost,
     addPost,
     getPostById,
     updatePost,
+    deletePost,
 };
