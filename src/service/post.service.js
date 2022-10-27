@@ -43,8 +43,28 @@ const getPostById = async (id) => {
     return { error: 'Post does not exist', post: null };
 };
 
+const updatePost = async ({ title, content, id, userEmail }) => {
+    const post = await BlogPost.findByPk(id, {
+        include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }],
+    });
+    
+    if (post.user.email !== userEmail) return { error: 'Unauthorized user', updatedPost: null };
+
+    await BlogPost.update({ title, content }, {
+        where: { id },
+    });
+
+    const updatedPost = await BlogPost.findByPk(id, {
+        include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }, 
+        { model: Category, as: 'categories', through: { attributes: [] } }],
+    });
+
+    return { error: null, updatedPost }; 
+};
+
 module.exports = {
     getAllPost,
     addPost,
     getPostById,
+    updatePost,
 };
