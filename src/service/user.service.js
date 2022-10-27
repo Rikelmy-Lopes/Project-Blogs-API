@@ -32,8 +32,14 @@ const getUserById = async (id) => {
     return { error: null, user };
 };
 
+const deleteUser = async (userEmail) => {
+    const [{ id }] = await User.findAll({ where: { email: userEmail } });
+    await User.destroy({ where: { id } });
+};
+
 module.exports = {
     addUser,
     getAllUser,
     getUserById,
+    deleteUser,
 };
