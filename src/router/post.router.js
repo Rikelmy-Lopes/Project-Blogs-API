@@ -5,9 +5,11 @@ const { validateToken } = require('../middleware/auth.middleware');
 const { validatePost, validateUpdatePost } = require('../middleware/post.middleware');
 
 const { getAllPost, addPost, getPostById, updatePost, 
-    deletePost } = require('../controller/post.controller');
+    deletePost, getPostsByTerm } = require('../controller/post.controller');
 
 const router = express.Router();
+
+router.get('/post/search', validateToken, getPostsByTerm);
 
 router.get('/post', validateToken, getAllPost);
 
